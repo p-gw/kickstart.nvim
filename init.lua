@@ -593,7 +593,6 @@ require('lazy').setup({
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --  See `:help lsp-config` for information about keys and how to configure
       local servers = {
-        -- clangd = {},
         gopls = {
           analyses = {
             unusedparams = true,
@@ -601,8 +600,22 @@ require('lazy').setup({
           staticcheck = true,
           gofumpt = true,
         },
-        pyright = {},
+        pyright = {
+          settings = {
+            pyright = {
+              disableOrganizeImports = true,
+            },
+            python = {
+              analysis = {
+                ignore = { '*' },
+              },
+            },
+          },
+        },
+        ruff = {},
         sqlfluff = {},
+        air = {},
+
         -- rust_analyzer = {},
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -660,6 +673,16 @@ require('lazy').setup({
         },
       })
       vim.lsp.enable 'lua_ls'
+
+      -- R Config
+      vim.lsp.config('air', {
+        on_attach = function(_, bufnr)
+          vim.api.nvim_create_autocmd('BufWritePre', {
+            buffer = bufnr,
+            callback = function() vim.lsp.buf.format() end,
+          })
+        end,
+      })
     end,
   },
 

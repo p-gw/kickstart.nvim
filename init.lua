@@ -100,8 +100,6 @@ vim.g.have_nerd_font = true
 
 -- Make line numbers default
 vim.o.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
 vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
@@ -115,6 +113,12 @@ vim.o.showmode = false
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
+
+-- Indentation
+vim.o.tabstop = 4
+vim.o.expandtab = true
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -256,7 +260,8 @@ rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added via a link or github org/name. To run setup automatically, use `opts = {}`
-  { 'NMAC427/guess-indent.nvim', opts = {} },
+  --
+  -- { 'NMAC427/guess-indent.nvim', opts = {} },
 
   -- Alternatively, use `config = function() ... end` for full control over the configuration.
   -- If you prefer to call `setup` explicitly, use:
@@ -310,6 +315,9 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
+        { '<leader>r', group = '[R]EPL', mode = { 'n', 'v' } },
+        { '<leader>rs', group = '[S]end', mode = { 'n', 'v' } },
+        { '<leader>rm', group = '[M]arks', mode = { 'n', 'v' } },
         { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
@@ -593,6 +601,7 @@ require('lazy').setup({
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --  See `:help lsp-config` for information about keys and how to configure
       local servers = {
+        -- go
         gopls = {
           analyses = {
             unusedparams = true,
@@ -600,6 +609,7 @@ require('lazy').setup({
           staticcheck = true,
           gofumpt = true,
         },
+        -- python
         pyright = {
           settings = {
             pyright = {
@@ -613,7 +623,9 @@ require('lazy').setup({
           },
         },
         ruff = {},
+        -- sql
         sqlfluff = {},
+        -- R
         air = {},
 
         -- rust_analyzer = {},
@@ -637,6 +649,8 @@ require('lazy').setup({
         'lua-language-server', -- Lua Language server
         'stylua', -- Used to format Lua code
         -- You can add other tools here that you want Mason to install
+        'r-languageserver',
+        'julia-lsp',
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -672,6 +686,7 @@ require('lazy').setup({
           Lua = {},
         },
       })
+
       vim.lsp.enable 'lua_ls'
 
       -- R Config
@@ -683,6 +698,17 @@ require('lazy').setup({
           })
         end,
       })
+
+      vim.lsp.config('r_language_server', {
+        on_attach = function(client, _)
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+        end,
+      })
+
+      vim.lsp.enable 'r_language_server'
+
+      vim.lsp.enable 'julials'
     end,
   },
 
@@ -714,13 +740,21 @@ require('lazy').setup({
           }
         end
       end,
+      formatters = {
+        command = 'julia',
+        args = { '--project=@runic', '--startup-file=no', '-e', 'using Runic; exit(Runic.main(ARGS))' },
+      },
       formatters_by_ft = {
         lua = { 'stylua' },
+        julia = { 'runic' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      },
+      default_format_opts = {
+        timeout_ms = 10000,
       },
     },
   },
@@ -913,6 +947,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
+  require 'custom.plugins.iron',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`

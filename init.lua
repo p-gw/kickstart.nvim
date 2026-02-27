@@ -864,7 +864,7 @@ require('lazy').setup({
       ---@diagnostic disable-next-line: missing-fields
       require('catppuccin').setup {
         no_italic = true,
-        flavour = 'macchiato',
+        flavour = 'mocha',
       }
 
       -- Load the colorscheme here.

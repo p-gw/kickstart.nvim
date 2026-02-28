@@ -222,6 +222,15 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
+-- center cursor on moves
+vim.keymap.set('n', 'G', 'Gzz', { noremap = true })
+vim.keymap.set('n', 'n', 'nzz', { noremap = true })
+vim.keymap.set('n', 'N', 'Nzz', { noremap = true })
+vim.keymap.set('n', '*', '*zz', { noremap = true })
+vim.keymap.set('n', '#', '#zz', { noremap = true })
+vim.keymap.set('n', 'g*', 'g*zz', { noremap = true })
+vim.keymap.set('n', 'g#', 'g#zz', { noremap = true })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -389,11 +398,17 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          mappings = {
+            i = {
+              -- on enter goto result and center cursor
+              ['<CR>'] = function(bufnr)
+                require('telescope.actions').select_default(bufnr)
+                vim.schedule(function() vim.cmd 'normal! zz' end)
+              end,
+            },
+          },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = { require('telescope.themes').get_dropdown() },
@@ -624,7 +639,7 @@ require('lazy').setup({
         },
         ruff = {},
         -- sql
-        sqlfluff = {},
+        sqruff = {},
         -- R
         air = {},
 
@@ -779,12 +794,10 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function() require('luasnip.loaders.from_vscode').lazy_load() end,
+          },
         },
         opts = {},
       },

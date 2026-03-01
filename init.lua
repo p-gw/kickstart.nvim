@@ -639,7 +639,7 @@ require('lazy').setup({
         },
         ruff = {},
         -- sql
-        sqruff = {},
+        sqlfmt = {},
         -- R
         air = {},
 
@@ -762,6 +762,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         julia = { 'runic' },
+        sql = { 'sqlfmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --

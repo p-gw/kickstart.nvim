@@ -7,7 +7,7 @@ return {
       config = {
         scratch_repl = true,
         repl_definition = {
-          sh = { command = { 'zsh' } },
+          sh = { command = { 'nu' } },
           R = {
             command = { 'R' },
           },

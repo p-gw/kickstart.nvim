@@ -991,6 +991,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.neo-tree',
   require 'custom.plugins.iron',
   require 'custom.plugins.persistence',
+  require 'custom.plugins.quarto',
   -- require 'custom.plugins.dashboard',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 

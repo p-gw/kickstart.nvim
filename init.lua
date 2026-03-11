@@ -639,9 +639,11 @@ require('lazy').setup({
         },
         ruff = {},
         -- sql
-        sqlfmt = {},
+        sqruff = {},
         -- R
         air = {},
+        ['yaml-language-server'] = {},
+        tombi = {},
 
         -- rust_analyzer = {},
         --
@@ -779,7 +781,7 @@ require('lazy').setup({
           return nil
         else
           return {
-            timeout_ms = 1000,
+            timeout_ms = 2500,
             lsp_format = 'fallback',
           }
         end
@@ -791,7 +793,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         julia = { 'runic' },
-        sql = { 'sqlfmt' },
+        sql = { 'sqruff' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -799,7 +801,7 @@ require('lazy').setup({
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
       },
       default_format_opts = {
-        timeout_ms = 10000,
+        timeout_ms = 2500,
       },
     },
   },
@@ -965,8 +967,26 @@ require('lazy').setup({
         install_dir = vim.fn.stdpath 'data' .. '/site',
       }
 
-      local filetypes =
-        { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'python', 'go', 'r', 'julia', 'sql' }
+      local filetypes = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'python',
+        'go',
+        'r',
+        'julia',
+        'sql',
+        'yaml',
+        'toml',
+      }
       require('nvim-treesitter').install(filetypes)
       vim.api.nvim_create_autocmd('FileType', {
         pattern = filetypes,
@@ -992,6 +1012,7 @@ require('lazy').setup({
   require 'custom.plugins.iron',
   require 'custom.plugins.persistence',
   require 'custom.plugins.quarto',
+  require 'custom.plugins.filetypes',
   -- require 'custom.plugins.dashboard',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 

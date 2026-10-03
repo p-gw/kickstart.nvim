@@ -651,7 +651,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
+        ['typescript-language-server'] = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -755,6 +755,15 @@ require('lazy').setup({
           })
         end,
       })
+
+      -- Typescript Config
+      vim.lsp.config('typescript-language-server', {
+        cmd = { 'typescript-language-server', '--stdio' },
+        filetypes = { 'typescript' },
+        root_dir = vim.fs.root(0, { 'package.json', '.git' }),
+      })
+
+      vim.lsp.enable 'typescript-language-server'
     end,
   },
 
@@ -956,6 +965,11 @@ require('lazy').setup({
 
       -- ... and there is more!
       --  Check out: https://github.com/nvim-mini/mini.nvim
+      require('mini.files').setup()
+
+      vim.keymap.set('n', '<leader>tf', function()
+        if not MiniFiles.close() then MiniFiles.open() end
+      end, { desc = 'Toggle mini.files' })
     end,
   },
 
@@ -987,6 +1001,8 @@ require('lazy').setup({
         'sql',
         'yaml',
         'toml',
+        'typescript',
+        'javascript',
       }
       require('nvim-treesitter').install(filetypes)
       vim.api.nvim_create_autocmd('FileType', {

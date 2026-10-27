@@ -986,6 +986,7 @@ require('lazy').setup({
         'bash',
         'c',
         'diff',
+        'hcl',
         'html',
         'lua',
         'luadoc',

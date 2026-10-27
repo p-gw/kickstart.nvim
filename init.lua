@@ -796,6 +796,7 @@ require('lazy').setup({
         end
       end,
       formatters = {
+        hclfmt = { command = 'hclfmt', stdin = true },
         sqlfluff = {
           args = { 'fix', '-' },
         },
@@ -804,6 +805,7 @@ require('lazy').setup({
         lua = { 'stylua' },
         julia = { 'runic' },
         sql = { 'sqlfluff' },
+        hcl = { 'hclfmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
